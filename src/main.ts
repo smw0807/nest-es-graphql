@@ -9,7 +9,7 @@ async function bootstrap() {
 
   // 환경변수 작업
   const configService = app.get(ConfigService);
-  console.log(configService);
+
   const port = configService.get('app.port');
   await app.listen(port);
 }
