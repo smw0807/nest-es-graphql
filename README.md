@@ -23,3 +23,8 @@
    git clone https://github.com/yourusername/nestjs-graphql-elasticsearch.git
    cd nestjs-graphql-elasticsearch
    ```
+
+# 참고사이트
+
+1. NestJS + ElasticSearch
+   - https://discuss.elastic.co/t/how-to-integrate-elasticsearch-8-x-with-nest-js/341166
