@@ -13,4 +13,5 @@ export const validationSchema = joi.object({
   ES_MAX_RESPONSE_SIZE: joi.string().default('100mb'),
   ES_REQUEST_TIMEOUT: joi.number().default(60000),
   ES_PING_TIMEOUT: joi.number().default(60000),
+  ES_INDEX_VER: joi.string().default('0.0'),
 });
