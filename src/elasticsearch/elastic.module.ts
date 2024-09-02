@@ -3,8 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { ElasticsearchModule as esModule } from '@nestjs/elasticsearch';
 import { ConfigModule } from 'src/config/config.module';
 import { ElasticSearchService } from './elastic.service';
-// import * as fs from 'fs';
-// import * as path from 'path';
 
 @Module({
   imports: [
