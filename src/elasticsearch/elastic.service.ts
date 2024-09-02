@@ -13,8 +13,10 @@ export class ElasticSearchService {
     try {
       const health = await this.esService.cluster.health({});
       this.logger.log('### Elasticsearch health check S###');
-      this.logger.log(health.cluster_name);
-      this.logger.log(health.status);
+      const keys = Object.keys(health);
+      keys.forEach((key) => {
+        this.logger.log(`${key}: ${health[key]}`);
+      });
       this.logger.log('### Elasticsearch health check E###');
     } catch (e) {
       this.logger.error('Elasticsearch health check failed', e.message);
