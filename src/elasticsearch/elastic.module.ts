@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ElasticsearchModule as esModule } from '@nestjs/elasticsearch';
-import { ConfigModule } from 'src/config/config.module';
 import { ElasticSearchService } from './elastic.service';
-
+import { ElasticIndexService } from './elastic.index.service';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
+    ConfigModule,
     esModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -36,6 +37,6 @@ import { ElasticSearchService } from './elastic.service';
       },
     }),
   ],
-  providers: [ElasticSearchService],
+  providers: [ElasticSearchService, ElasticIndexService],
 })
 export class ElasticSearchModule {}
