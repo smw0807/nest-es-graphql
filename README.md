@@ -27,5 +27,4 @@
 # 참고사이트
 
 1. NestJS + ElasticSearch
-   - https://github.com/nestjs/elasticsearch
-   - https://discuss.elastic.co/t/how-to-integrate-elasticsearch-8-x-with-nest-js/341166
+   - https://github.com/codemask-labs/nestjs-elasticsearch
