@@ -1,5 +1,5 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { ElasticsearchService } from '@nestjs/elasticsearch';
+import { ElasticsearchService } from '@codemask-labs/nestjs-elasticsearch';
 
 @Injectable()
 export class ElasticSearchService implements OnModuleInit {
@@ -13,7 +13,7 @@ export class ElasticSearchService implements OnModuleInit {
   // 연결된 Elasticsearch 클러스터의 상태를 확인
   async healthCheck() {
     try {
-      const health = await this.esService.cluster.health({});
+      const health = await this.esService.getClusterHealth();
       this.logger.log('### Elasticsearch health check S###');
       const keys = Object.keys(health);
       keys.forEach((key) => {
