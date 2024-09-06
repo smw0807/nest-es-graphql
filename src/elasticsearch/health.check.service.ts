@@ -2,8 +2,8 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ElasticsearchService } from '@codemask-labs/nestjs-elasticsearch';
 
 @Injectable()
-export class ElasticSearchService implements OnModuleInit {
-  private readonly logger = new Logger(ElasticSearchService.name);
+export class healthCheckService implements OnModuleInit {
+  private readonly logger = new Logger(healthCheckService.name);
   constructor(private readonly esService: ElasticsearchService) {}
 
   // 초기화 시 Elasticsearch 클러스터의 상태를 확인

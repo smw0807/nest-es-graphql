@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ElasticsearchModule as esModule } from '@codemask-labs/nestjs-elasticsearch';
-import { ElasticSearchService } from './elastic.service';
-// import { ElasticIndexService } from './elastic.index.service';
+import { healthCheckService } from './health.check.service';
 import { ConfigModule } from '@nestjs/config';
+import { IndexVersionDocument } from './index/IndexVersion';
+import { UserDocument } from './index/User';
 @Module({
   imports: [
     ConfigModule,
@@ -17,8 +18,9 @@ import { ConfigModule } from '@nestjs/config';
         password: process.env.ES_PASSWORD,
       },
     }),
+    esModule.forFeature([IndexVersionDocument, UserDocument]),
   ],
-  providers: [ElasticSearchService],
+  providers: [healthCheckService],
 })
 export class ElasticSearchModule {}
 /*
