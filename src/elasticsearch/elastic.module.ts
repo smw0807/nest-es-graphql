@@ -2,14 +2,13 @@ import { Module } from '@nestjs/common';
 import { ElasticsearchModule as esModule } from '@codemask-labs/nestjs-elasticsearch';
 import { healthCheckService } from './health.check.service';
 import { ConfigModule } from '@nestjs/config';
-import { IndexVersionDocument } from './index/IndexVersion';
 import { UserDocument } from './index/User';
+import { UserService } from './user/user.service';
 @Module({
   imports: [
     ConfigModule,
     esModule.register({
       node: process.env.ES_HOSTS,
-      sniffOnStart: true,
       tls: {
         rejectUnauthorized: false,
       },
@@ -18,9 +17,9 @@ import { UserDocument } from './index/User';
         password: process.env.ES_PASSWORD,
       },
     }),
-    esModule.forFeature([IndexVersionDocument, UserDocument]),
+    esModule.forFeature([UserDocument]),
   ],
-  providers: [healthCheckService],
+  providers: [healthCheckService, UserService],
 })
 export class ElasticSearchModule {}
 /*
