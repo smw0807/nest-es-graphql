@@ -4,6 +4,7 @@ import { healthCheckService } from './health.check.service';
 import { ConfigModule } from '@nestjs/config';
 import { UserDocument } from './index/User';
 import { UserService } from './user/user.service';
+import { UserResolver } from './user/user.resolver';
 @Module({
   imports: [
     ConfigModule,
@@ -19,7 +20,7 @@ import { UserService } from './user/user.service';
     }),
     esModule.forFeature([UserDocument]),
   ],
-  providers: [healthCheckService, UserService],
+  providers: [healthCheckService, UserService, UserResolver],
 })
 export class ElasticSearchModule {}
 /*
