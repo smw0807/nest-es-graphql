@@ -14,4 +14,7 @@ export const validationSchema = joi.object({
   ES_REQUEST_TIMEOUT: joi.number().default(60000),
   ES_PING_TIMEOUT: joi.number().default(60000),
   ES_INDEX_VER: joi.string().default('0.0'),
+
+  // utils
+  CRYPTO_SECRET: joi.string().default('secret'),
 });
