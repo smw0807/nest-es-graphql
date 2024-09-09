@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UserList } from './models/user.model';
 import { UserService } from './user.service';
-import { UserListInput } from './inputs/user.input';
+import { UserCreateInput, UserListInput } from './inputs/user.input';
 
 @Resolver()
 export class UserResolver {
@@ -16,9 +16,20 @@ export class UserResolver {
       const result = await this.userService.getUserList(dto);
       console.log('result : ', result);
     } catch (e) {
-      this.logger.error('사용자 리스트 조회 실패', e.message);
+      this.logger.error('사용자 리스트 조회 실패', e);
       console.error(e);
     }
     return { total: 0, data: [] };
+  }
+
+  @Mutation(() => Boolean, { description: '사용자 생성' })
+  async createUser(@Args('data') data: UserCreateInput): Promise<boolean> {
+    try {
+      const result = await this.userService.createUser(data);
+      return result;
+    } catch (e) {
+      this.logger.error('사용자 생성 실패', e);
+      return e;
+    }
   }
 }

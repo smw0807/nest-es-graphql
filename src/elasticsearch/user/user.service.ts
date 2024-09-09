@@ -6,8 +6,10 @@ import {
 } from '@codemask-labs/nestjs-elasticsearch';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { UserDocument } from '../index/User';
-import { UserListInput } from './inputs/user.input';
+import { UserCreateInput, UserListInput } from './inputs/user.input';
 import { UserList } from './models/user.model';
+import { ApolloError } from 'apollo-server-express';
+import { CommonUtilsService } from 'src/utils/common.utils';
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -17,7 +19,10 @@ export class UserService implements OnModuleInit {
   @InjectIndex(UserDocument)
   private readonly userIndex: Index<UserDocument>;
 
-  constructor(private readonly esService: ElasticsearchService) {}
+  constructor(
+    private readonly esService: ElasticsearchService,
+    private readonly cmnUtilsService: CommonUtilsService,
+  ) {}
 
   async onModuleInit() {
     await this.createIndex();
@@ -51,8 +56,7 @@ export class UserService implements OnModuleInit {
         this.logger.log('completed user index creation!!!');
       }
     } catch (e) {
-      this.logger.error('User index creation failed', e.message);
-      console.error(e);
+      this.logger.error('User index creation failed', e);
     }
   }
 
@@ -72,16 +76,103 @@ export class UserService implements OnModuleInit {
             },
           },
         ],
-        query: { bool: { must: [] } },
       });
       result.total = total;
       result.data = documents.map((doc) => doc.source);
       console.log('total', total);
       console.log('documents', documents);
     } catch (e) {
-      this.logger.error('Failed to get user list', e.message);
-      console.error(e);
+      this.logger.error('Failed to get user list', e);
     }
     return result;
+  }
+
+  // 사용자 생성
+  async createUser(data: UserCreateInput): Promise<boolean> {
+    try {
+      // 아이디 중복 체크
+      await this.checkUserId(data.user_id);
+      // 이메일 중복 체크
+      await this.checkEmail(data.email);
+
+      // 패스워드 암호화
+      data.password = this.cmnUtilsService.cryptoPassword(data.password);
+
+      // 사용자 생성
+      const result = await this.esService.getBaseService().index({
+        index: this.INDEX_NAME,
+        body: {
+          ...data,
+          created_at: new Date(),
+        },
+      });
+      this.logger.log(result.result, 'User created');
+      return true;
+    } catch (e) {
+      this.logger.error('Failed to create user', e);
+      return e;
+    }
+  }
+
+  // 아이디 중복 체크
+  async checkUserId(userId: string): Promise<void> {
+    try {
+      const { total } = await this.userIndex.search({
+        size: 1,
+        query: {
+          bool: {
+            must: [
+              {
+                term: {
+                  user_id: {
+                    value: userId,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      });
+      if (total) {
+        throw new ApolloError(
+          '이미 사용중인 아이디입니다.',
+          'DUPLICATED_USER_ID',
+        );
+      }
+    } catch (e) {
+      this.logger.error('Failed to check user id', e);
+      throw e;
+    }
+  }
+
+  // 이메일 중복 체크
+  async checkEmail(email: string): Promise<void> {
+    try {
+      const { total } = await this.userIndex.search({
+        size: 1,
+        query: {
+          bool: {
+            must: [
+              {
+                term: {
+                  email: {
+                    value: email,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      });
+      if (total) {
+        throw new ApolloError(
+          '이미 사용중인 이메일입니다.',
+          'DUPLICATED_EMAIL',
+        );
+      }
+    } catch (e) {
+      this.logger.error('Failed to check email', e);
+      throw e;
+    }
   }
 }

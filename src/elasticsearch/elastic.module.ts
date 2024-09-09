@@ -5,9 +5,11 @@ import { ConfigModule } from '@nestjs/config';
 import { UserDocument } from './index/User';
 import { UserService } from './user/user.service';
 import { UserResolver } from './user/user.resolver';
+import { UtilsModule } from 'src/utils/utils.module';
 @Module({
   imports: [
     ConfigModule,
+    UtilsModule,
     esModule.register({
       node: process.env.ES_HOSTS,
       tls: {
