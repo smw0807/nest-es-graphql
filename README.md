@@ -8,6 +8,12 @@
 - **Elasticsearch 통합**: Elasticsearch를 사용하여 데이터를 저장하고, 강력한 전체 텍스트 검색 기능을 제공합니다.
 - **NestJS 프레임워크**: 확장 가능한 서버 사이드 애플리케이션을 구축하기 위해 NestJS의 유연성과 모듈성을 활용합니다.
 
+## @codemask-labs/nestjs-elasticsearch 패키지
+
+@nestjs/elasticsearch 패키지 말고 위 패키지를 사용함.  
+인덱스 정의를 해서 TypeORM 같은 느낌의 기능을 제공해서 사용함.  
+다만 아쉬운게 도큐먼트에 대한 \_id를 구할 수가 없었음.
+
 ## 시작하기
 
 ### 개발당시 환경
@@ -28,23 +34,23 @@
 
    ```bash
    #APPLICATION
-   APP_NAME=
+   APP_NAME=ES_API
    APP_PORT=
-
-   #API
-   API_PREFIX=
 
    # ElaticSearch
    ES_HOSTS=
-   ES_USERNAME=
+   ES_USERNAME=elastic
    ES_PASSWORD=
    ES_MAX_RESPONSE_SIZE=100mb
    ES_REQUEST_TIMEOUT=60000
    ES_PING_TIMEOUT=60000
 
    #crypto solt
-   CRYPTO_SECRET=ElasticSearch
+   CRYPTO_SECRET=
    ```
+
+   빈 항목은 본인에 원하는 값으로 작성  
+   ES_PASSWORD는 설정한 값에 맞춰줘야함
 
 # 참고사이트
 
