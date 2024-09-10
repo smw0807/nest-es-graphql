@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 
 @ObjectType({ description: '사용자 정보' })
 export class User {
@@ -12,8 +12,10 @@ export class User {
   password: string;
   @Field(() => String, { description: '임시 비밀번호' })
   temp_password: string;
-  @Field(() => Date, { description: '생성일' })
-  created_at: Date;
+  @Field(() => String, { description: '생성일' })
+  created_at: string;
+  @Field(() => [Float], { nullable: true, description: 'sort value' })
+  sort?: number[];
 }
 
 @ObjectType({ description: '사용자 리스트' })
