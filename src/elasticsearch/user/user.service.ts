@@ -10,6 +10,7 @@ import { UserCreateInput, UserListInput } from './inputs/user.input';
 import { UserList } from './models/user.model';
 import { ApolloError } from 'apollo-server-express';
 import { CommonUtilsService } from 'src/utils/common.utils';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class UserService implements OnModuleInit {
@@ -45,7 +46,7 @@ export class UserService implements OnModuleInit {
           mappings: {
             properties: {
               user_id: { type: 'keyword' },
-              name: { type: 'text' },
+              name: { type: 'keyword' },
               email: { type: 'keyword' },
               password: { type: 'keyword' },
               temp_password: { type: 'keyword' },
@@ -64,11 +65,13 @@ export class UserService implements OnModuleInit {
   async getUserList({ size, search_after }: UserListInput): Promise<UserList> {
     const result: UserList = { total: 0, data: [] };
     try {
-      console.log('size', size);
-      console.log('search_after', search_after);
+      /**
+       * ?? docuemnt의 _id는 제공되지 않네??
+       * ?? search_after는 왜 안되지??
+       */
       const { total, documents } = await this.userIndex.search({
-        size: 10,
-        search_after: [],
+        size: size,
+        search_after: search_after ? search_after : undefined,
         sort: [
           {
             created_at: {
@@ -78,9 +81,11 @@ export class UserService implements OnModuleInit {
         ],
       });
       result.total = total;
-      result.data = documents.map((doc) => doc.source);
-      console.log('total', total);
-      console.log('documents', documents);
+      result.data = documents.map((doc) => ({
+        ...doc.source,
+        created_at: dayjs(doc.source.created_at).format('YYYY-MM-DD HH:mm:ss'),
+        sort: [...doc.sort],
+      }));
     } catch (e) {
       this.logger.error('Failed to get user list', e);
     }
@@ -106,7 +111,7 @@ export class UserService implements OnModuleInit {
           created_at: new Date(),
         },
       });
-      this.logger.log(result.result, 'User created');
+      this.logger.log(result, 'User created');
       return true;
     } catch (e) {
       this.logger.error('Failed to create user', e);
