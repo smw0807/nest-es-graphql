@@ -24,6 +24,28 @@
    cd nestjs-graphql-elasticsearch
    ```
 
+2. .env 파일 생성 후 작성 항목
+
+   ```bash
+   #APPLICATION
+   APP_NAME=
+   APP_PORT=
+
+   #API
+   API_PREFIX=
+
+   # ElaticSearch
+   ES_HOSTS=
+   ES_USERNAME=
+   ES_PASSWORD=
+   ES_MAX_RESPONSE_SIZE=100mb
+   ES_REQUEST_TIMEOUT=60000
+   ES_PING_TIMEOUT=60000
+
+   #crypto solt
+   CRYPTO_SECRET=ElasticSearch
+   ```
+
 # 참고사이트
 
 1. NestJS + ElasticSearch
