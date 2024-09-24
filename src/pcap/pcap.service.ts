@@ -1,11 +1,13 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as pcap from 'pcap';
-import { PcapSession } from 'pcap';
+import { PcapPacket } from './types/pcap.type';
+import { CommonUtilsService } from 'src/utils/common.utils';
 
 @Injectable()
 export class PcapService implements OnModuleInit {
+  constructor(private readonly commonUtilsService: CommonUtilsService) {}
   private tcp_tracker = new pcap.TCPTracker();
-  private pcap_session: PcapSession = null;
+  private pcap_session = null;
   onModuleInit() {
     console.log('PcapModule has been initialized.');
     this.startCapture();
@@ -14,8 +16,29 @@ export class PcapService implements OnModuleInit {
   startCapture() {
     this.pcap_session = pcap.createSession('en0');
     this.pcap_session.on('packet', (raw_packet) => {
-      const packet = pcap.decode.packet(raw_packet);
-      console.dir(packet, { depth: null });
+      const packet: PcapPacket = pcap.decode.packet(raw_packet);
+      const data = {
+        linkType: packet.link_type,
+        dhost: this.commonUtilsService.decToHex(packet.payload.dhost.addr),
+        shost: this.commonUtilsService.decToHex(packet.payload.shost.addr),
+        ttl: packet.payload.payload.ttl,
+        saddr: this.commonUtilsService.formatIP(
+          packet.payload.payload.saddr?.addr ?? null,
+        ),
+        daddr: this.commonUtilsService.formatIP(
+          packet.payload.payload.daddr?.addr ?? null,
+        ),
+        sport: packet.payload.payload.payload?.sport ?? null,
+        dport: packet.payload.payload.payload?.dport ?? null,
+        hexData: this.commonUtilsService.hexToDec(
+          packet.payload.payload.payload?.data ?? null,
+        ),
+        stringData: this.commonUtilsService.hexToString(
+          packet.payload.payload.payload?.data ?? null,
+        ),
+        dataLength: packet.payload.payload.payload?.dataLength ?? null,
+      };
+      console.log(data);
     });
   }
 }
