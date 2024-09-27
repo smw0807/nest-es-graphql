@@ -48,6 +48,7 @@ export class PcapService implements OnModuleInit {
         dataLength: packet.payload.payload.payload?.dataLength ?? null,
         createdAt: dayjs().add(9, 'h').toDate(),
       };
+      //todo 카프카로 전송 로직 추가
       console.log(data);
     });
   }
