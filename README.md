@@ -32,10 +32,14 @@
    #APPLICATION
    APP_NAME=ES_API
    APP_PORT=
+   #APP_ROLE=producer일 경우 패킷을 캡처하고 Kafka에 데이터를 전송하는 프로듀서 역할을 수행.
+   #APP_ROLE=consumer일 경우 Kafka에서 데이터를 소비하고 Elasticsearch에 저장하는 컨슈머 역할을 수행.
+   #APP_ROLE=consumer
+   APP_ROLE=producer
 
    # ElaticSearch
-   ES_HOSTS=
-   ES_USERNAME=elastic
+   ES_HOSTS=http://localhost:9200
+   ES_USERNAME=
    ES_PASSWORD=
    ES_MAX_RESPONSE_SIZE=100mb
    ES_REQUEST_TIMEOUT=60000
