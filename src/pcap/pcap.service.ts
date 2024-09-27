@@ -3,15 +3,22 @@ import * as pcap from 'pcap';
 import { PcapPacket } from './types/pcap.type';
 import { CommonUtilsService } from 'src/utils/common.utils';
 import * as dayjs from 'dayjs';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PcapService implements OnModuleInit {
-  constructor(private readonly commonUtilsService: CommonUtilsService) {}
+  constructor(
+    private readonly commonUtilsService: CommonUtilsService,
+    private readonly configService: ConfigService,
+  ) {}
   private tcp_tracker = new pcap.TCPTracker();
   private pcap_session = null;
   onModuleInit() {
-    console.log('PcapModule has been initialized.');
-    this.startCapture();
+    const config = this.configService.get('app');
+    if (config.APP_ROLE === 'producer') {
+      console.log('PcapModule has been initialized.');
+      this.startCapture();
+    }
   }
 
   startCapture() {
