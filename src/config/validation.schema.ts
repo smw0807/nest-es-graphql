@@ -4,6 +4,7 @@ export const validationSchema = joi.object({
   // APPLICATION
   APP_NAME: joi.string().default('NestJS App'),
   APP_PORT: joi.number().default(3000),
+  APP_ROLE: joi.string().default('producer'),
 
   // ELASTICSEARCH
   ES_HOSTS: joi.string().required(),
