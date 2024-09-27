@@ -1,21 +1,22 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import * as pcap from 'pcap';
 import { PcapPacket } from './types/pcap.type';
 import { CommonUtilsService } from 'src/utils/common.utils';
 import * as dayjs from 'dayjs';
-import { ConfigService } from '@nestjs/config';
+import { ConfigType } from '@nestjs/config';
+import appConfig from 'src/config/app.config';
 
 @Injectable()
 export class PcapService implements OnModuleInit {
   constructor(
     private readonly commonUtilsService: CommonUtilsService,
-    private readonly configService: ConfigService,
+    @Inject(appConfig.KEY)
+    private readonly config: ConfigType<typeof appConfig>,
   ) {}
   private tcp_tracker = new pcap.TCPTracker();
   private pcap_session = null;
   onModuleInit() {
-    const config = this.configService.get('app');
-    if (config.APP_ROLE === 'producer') {
+    if (this.config.APP_ROLE === 'producer') {
       console.log('PcapModule has been initialized.');
       this.startCapture();
     }
