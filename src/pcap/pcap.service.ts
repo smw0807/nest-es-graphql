@@ -2,6 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as pcap from 'pcap';
 import { PcapPacket } from './types/pcap.type';
 import { CommonUtilsService } from 'src/utils/common.utils';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class PcapService implements OnModuleInit {
@@ -33,10 +34,11 @@ export class PcapService implements OnModuleInit {
         hexData: this.commonUtilsService.hexToDec(
           packet.payload.payload.payload?.data ?? null,
         ),
-        stringData: this.commonUtilsService.hexToString(
-          packet.payload.payload.payload?.data ?? null,
-        ),
+        // stringData: this.commonUtilsService.hexToString(
+        //   packet.payload.payload.payload?.data ?? null,
+        // ),
         dataLength: packet.payload.payload.payload?.dataLength ?? null,
+        createdAt: dayjs().add(9, 'h').toDate(),
       };
       console.log(data);
     });
