@@ -33,6 +33,7 @@
     "dayjs": "^1.11.13",
     "graphql": "^16.9.0",
     "joi": "^17.13.3",
+    "kafkajs": "^2.2.4",
     "nest-winston": "^1.9.7",
     "pcap": "^3.1.0",
     "reflect-metadata": "^0.2.0",
