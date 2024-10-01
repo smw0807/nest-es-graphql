@@ -6,6 +6,7 @@ import { UserDocument } from './index/User';
 import { UserService } from './user/user.service';
 import { UserResolver } from './user/user.resolver';
 import { UtilsModule } from 'src/utils/utils.module';
+import { PacketService } from './packet/packet.service';
 @Module({
   imports: [
     ConfigModule,
@@ -22,7 +23,8 @@ import { UtilsModule } from 'src/utils/utils.module';
     }),
     esModule.forFeature([UserDocument]),
   ],
-  providers: [healthCheckService, UserService, UserResolver],
+  providers: [healthCheckService, UserService, UserResolver, PacketService],
+  exports: [PacketService],
 })
 export class ElasticSearchModule {}
 /*

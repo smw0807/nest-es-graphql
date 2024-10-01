@@ -55,5 +55,9 @@
 # 참고사이트
 
 1. NestJS + ElasticSearch
+
    - https://www.npmjs.com/package/@codemask-labs/nestjs-elasticsearch
    - https://github.com/codemask-labs/nestjs-elasticsearch
+
+2. kafka
+   - https://docs.nestjs.com/microservices/kafka
